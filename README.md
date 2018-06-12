@@ -2,6 +2,19 @@
 
 [![npm version](https://badge.fury.io/js/apollo-server-native.svg)](https://badge.fury.io/js/apollo-server-native)
 
+## Installation
+
+With yarn:
+```
+yarn add apollo-server-native graphql graphql-tag graphql-tools
+```
+
+With npm:
+```
+npm install --save apollo-server-native graphql graphql-tag graphql-tools
+```
+
+
 ## Example
 
 ```js
