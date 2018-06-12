@@ -1,0 +1,40 @@
+{
+  "name": "apollo-server-native",
+  "version": "1.0.0-beta.1",
+  "description": "Production-ready Node.js GraphQL server without dependencies",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "author": "Alessio Dionisi <hello@adns.io>",
+  "license": "MIT",
+  "keywords": [
+    "GraphQL",
+    "Apollo",
+    "Server",
+    "Native",
+    "HTTP"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adnsio/apollo-server-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adnsio/apollo-server-native/issues"
+  },
+  "homepage": "https://github.com/adnsio/apollo-server-native#readme",
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "compile": "npm run clean && tsc",
+    "prepare": "npm run compile"
+  },
+  "dependencies": {
+    "apollo-server-core": "^2.0.0-beta.7",
+    "apollo-server-module-graphiql": "^2.0.0-beta.6"
+  },
+  "devDependencies": {
+    "@types/node": "^10.3.2",
+    "typescript": "^2.9.1"
+  }
+}
