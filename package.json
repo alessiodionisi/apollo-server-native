@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-native",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Production-ready Node.js GraphQL server without dependencies",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
