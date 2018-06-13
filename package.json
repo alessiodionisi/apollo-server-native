@@ -1,7 +1,7 @@
 {
   "name": "apollo-server-native",
   "version": "1.0.0-beta.2",
-  "description": "Production-ready Node.js GraphQL server without dependencies",
+  "description": "Apollo Server integration for native HTTP, HTTPS and HTTP2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "author": "Alessio Dionisi <hello@adns.io>",
