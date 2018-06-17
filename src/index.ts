@@ -1,6 +1,15 @@
+export { GraphQLOptions, gql } from 'apollo-server-core'
+
 export {
-  NativeGraphQLOptionsFunction,
-  NativeGraphiQLOptionsFunction,
-  nativeGraphql,
-  nativeGraphiql,
-} from './nativeApollo'
+  ApolloError,
+  toApolloError,
+  SyntaxError,
+  ValidationError,
+  AuthenticationError,
+  ForbiddenError,
+} from 'apollo-server-core'
+
+export {
+  ApolloServer,
+  ServerRegistration,
+} from './ApolloServer'

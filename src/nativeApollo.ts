@@ -1,17 +1,18 @@
 import {
   GraphQLOptions,
+  HttpQueryError,
   runHttpQuery,
   convertNodeHttpToRequest,
 } from 'apollo-server-core'
-import * as GraphiQL from 'apollo-server-module-graphiql'
+
 import url from 'url'
-import { IncomingMessage, ServerResponse } from 'http'
+import http from 'http'
 
 export interface NativeGraphQLOptionsFunction {
-  (req?: IncomingMessage): GraphQLOptions | Promise<GraphQLOptions>
+  (req?: http.IncomingMessage, res?: http.ServerResponse): GraphQLOptions | Promise<GraphQLOptions>
 }
 
-export function nativeGraphql(
+export function graphqlNative(
   options: GraphQLOptions | NativeGraphQLOptionsFunction,
 ) {
   if (!options) {
@@ -24,7 +25,7 @@ export function nativeGraphql(
     )
   }
 
-  const graphqlHandler = async (req: IncomingMessage, res: ServerResponse) => {
+  const graphqlHandler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
     let query
 
     if (!req.method) throw new Error('Apollo Server expects req.method')
@@ -41,7 +42,7 @@ export function nativeGraphql(
             resolve(rawBody)
           })
         })
-        query = await JSON.parse(body)
+        query = JSON.parse(body)
       } catch (err) {
         query = undefined
       }
@@ -49,63 +50,36 @@ export function nativeGraphql(
       query = url.parse(req.url, true).query
     }
 
-    try {
-      const gqlResponse = await runHttpQuery([req, res], {
-        method: req.method,
-        options: options,
-        query: query,
-        request: convertNodeHttpToRequest(req),
-      })
+    runHttpQuery([req, res], {
+      method: req.method,
+      options: options,
+      query: query,
+      request: convertNodeHttpToRequest(req),
+    }).then(
+      gqlResponse => {
+        res.setHeader('Content-Type', 'application/json')
+        res.setHeader(
+          'Content-Length',
+          Buffer.byteLength(gqlResponse, 'utf8').toString()
+        )
+        res.write(gqlResponse)
+        res.end()
+      },
+      (error: HttpQueryError) => {
+        if ('HttpQueryError' !== error.name) throw error
 
-      res.setHeader('Content-Type', 'application/json')
-      res.write(gqlResponse)
-      res.end()
-    } catch (error) {
-      if ('HttpQueryError' === error.name) {
         if (error.headers) {
           Object.keys(error.headers).forEach(header => {
             res.setHeader(header, error.headers[header])
           })
         }
-      }
 
-      if (!error.statusCode) {
-        error.statusCode = 500
-      }
-
-      res.statusCode = error.statusCode
-      res.write(error.message)
-      res.end()
-    }
-  }
-
-  return graphqlHandler
-}
-
-export interface NativeGraphiQLOptionsFunction {
-  (req?: IncomingMessage):
-    | GraphiQL.GraphiQLData
-    | Promise<GraphiQL.GraphiQLData>
-}
-
-export function nativeGraphiql(
-  options: GraphiQL.GraphiQLData | NativeGraphiQLOptionsFunction,
-) {
-  const graphiqlHandler = (req: IncomingMessage, res: ServerResponse) => {
-    const query = (req.url && url.parse(req.url, true).query) || {}
-    return GraphiQL.resolveGraphiQLString(query, options, req).then(
-      graphiqlString => {
-        res.setHeader('Content-Type', 'text/html')
-        res.write(graphiqlString)
-        res.end()
-      },
-      error => {
-        res.statusCode = 500
+        res.statusCode = error.statusCode
         res.write(error.message)
         res.end()
-      },
+      }
     )
   }
 
-  return graphiqlHandler
+  return graphqlHandler
 }

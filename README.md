@@ -4,8 +4,8 @@
 
 This integration of Apollo Server works with native HTTP, HTTPS and HTTP2.
 
-## Example
-Install `apollo-server-native graphql graphql-tag graphql-tools` packages
+<!-- ## Example
+Install `apollo-server-native graphql graphql-tools` packages
 
 ```js
 const http = require('http')
@@ -42,10 +42,10 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(3000)
-```
+``` -->
 
 ## Example with GraphQL Playground
-Install `apollo-server-native graphql graphql-tag graphql-tools graphql-playground-html` packages
+Install `apollo-server-native` package with npm or yarn
 
 ```js
 const http = require('http')
