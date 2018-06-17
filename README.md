@@ -4,7 +4,7 @@
 
 This integration of Apollo Server works with native HTTP, HTTPS and HTTP2.
 
-## Example with GraphQL Playground
+## Example with HTTP
 Install `apollo-server-native` package with npm or yarn
 
 ```js
