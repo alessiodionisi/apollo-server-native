@@ -7,13 +7,9 @@ import { RenderPageOptions as PlaygroundRenderPageOptions, renderPlaygroundPage 
 import http from 'http'
 
 export interface ServerRegistration {
-  server: http.Server;
-  path?: string;
-  // bodyParserConfig?: OptionsJson | boolean;
-  // onHealthCheck?: (req: express.Request) => Promise<any>;
-  // disableHealthCheck?: boolean;
-  gui?: boolean | PlaygroundRenderPageOptions;
-  // uploads?: boolean | Record<string, any>;
+  server: http.Server
+  path?: string
+  gui?: boolean | PlaygroundRenderPageOptions
 }
 
 export class ApolloServer extends ApolloServerBase {
@@ -27,12 +23,7 @@ export class ApolloServer extends ApolloServerBase {
   public applyMiddleware({
     server,
     path,
-    // cors,
-    // bodyParserConfig,
-    // disableHealthCheck,
     gui,
-    // onHealthCheck,
-    // uploads,
   }: ServerRegistration) {
     if (!path) path = '/graphql'
 
