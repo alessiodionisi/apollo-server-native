@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-native",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "Apollo Server integration for HTTP, HTTPS and HTTP2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -26,11 +26,12 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "compile": "npm run clean && tsc",
-    "prepublish": "npm run compile"
+    "build": "yarn clean && tsc",
+    "prepublish": "yarn build"
   },
   "dependencies": {
-    "apollo-server-core": "^2.0.0-rc.0",
+    "apollo-server-core": "^2.0.0-rc.6",
+    "graphql": "^0.13.2",
     "graphql-playground-html": "^1.6.0"
   },
   "devDependencies": {

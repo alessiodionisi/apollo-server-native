@@ -2,7 +2,7 @@ import {
   GraphQLOptions,
   HttpQueryError,
   runHttpQuery,
-  convertNodeHttpToRequest,
+  convertNodeHttpToRequest
 } from 'apollo-server-core'
 
 import url from 'url'
@@ -13,7 +13,7 @@ export interface NativeGraphQLOptionsFunction {
 }
 
 export function graphqlNative(
-  options: GraphQLOptions | NativeGraphQLOptionsFunction,
+  options: GraphQLOptions | NativeGraphQLOptionsFunction
 ) {
   if (!options) {
     throw new Error('Apollo Server requires options.')
@@ -54,15 +54,21 @@ export function graphqlNative(
       method: req.method,
       options: options,
       query: query,
-      request: convertNodeHttpToRequest(req),
+      request: convertNodeHttpToRequest(req)
     }).then(
-      gqlResponse => {
-        res.setHeader('Content-Type', 'application/json')
+      ({ graphqlResponse, responseInit }) => {
+        if (responseInit.headers) {
+          const headers = responseInit.headers
+          Object.keys(headers).forEach(header => {
+            res.setHeader(header, headers[header])
+          })
+        }
+        // res.setHeader('Content-Type', 'application/json')
         res.setHeader(
           'Content-Length',
-          Buffer.byteLength(gqlResponse, 'utf8').toString()
+          graphqlResponse.length
         )
-        res.write(gqlResponse)
+        res.write(graphqlResponse)
         res.end()
       },
       (error: HttpQueryError) => {

@@ -25,11 +25,11 @@ const resolvers = {
 }
 
 const server = new ApolloServer({ typeDefs, resolvers })
+const serverHandler = server.createHandler()
 
 const httpServer = http.createServer()
-server.applyMiddleware({
-  server: httpServer,
-  path: '/'
-})
+
+httpServer.on('request', serverHandler)
+
 httpServer.listen(3000, () => console.log(`🚀 Server ready at http://localhost:3000`))
 ```

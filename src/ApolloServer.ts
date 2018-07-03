@@ -7,7 +7,6 @@ import { RenderPageOptions as PlaygroundRenderPageOptions, renderPlaygroundPage 
 import http from 'http'
 
 export interface ServerRegistration {
-  server: http.Server
   path?: string
   gui?: boolean | PlaygroundRenderPageOptions
 }
@@ -20,38 +19,40 @@ export class ApolloServer extends ApolloServerBase {
     return super.graphQLServerOptions({ req, res })
   }
 
-  public applyMiddleware({
-    server,
+  public createHandler({
     path,
-    gui,
-  }: ServerRegistration) {
+    gui
+  }: ServerRegistration = {}) {
     if (!path) path = '/graphql'
 
     this.graphqlPath = path
 
     const guiEnabled =
       !!gui || (gui === undefined && process.env.NODE_ENV !== 'production')
-
-    server.on('request', (req: http.IncomingMessage, res: http.ServerResponse) => {
+    
+    const handler = (req: http.IncomingMessage, res: http.ServerResponse) => {
       if (req.url !== path) return
 
       if (guiEnabled && req.method === 'GET') {
         const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
           endpoint: path,
           subscriptionEndpoint: this.subscriptionsPath,
-          version: '1.7.0',
+          version: this.playgroundVersion,
           ...(typeof gui === 'boolean' ? {} : gui),
         }
         const playgroundPage = renderPlaygroundPage(playgroundRenderPageOptions)
         res.setHeader('Content-Type', 'text/html')
+        res.setHeader('Content-Length', playgroundPage.length)
         res.write(playgroundPage)
         return res.end()
       }
 
       return graphqlNative(this.createGraphQLServerOptions.bind(this))(
         req,
-        res,
+        res
       )
-    })
+    }
+
+    return handler
   }
 }
