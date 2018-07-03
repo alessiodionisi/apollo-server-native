@@ -63,7 +63,6 @@ export function graphqlNative(
             res.setHeader(header, headers[header])
           })
         }
-        // res.setHeader('Content-Type', 'application/json')
         res.setHeader(
           'Content-Length',
           graphqlResponse.length
