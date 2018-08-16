@@ -1,14 +1,18 @@
-import { graphqlNative } from './nativeApollo'
-
-import { ApolloServerBase } from 'apollo-server-core'
-export { GraphQLOptions, GraphQLExtension } from 'apollo-server-core'
-import { GraphQLOptions } from 'apollo-server-core'
-import { RenderPageOptions as PlaygroundRenderPageOptions, renderPlaygroundPage } from 'graphql-playground-html'
 import http from 'http'
+
+import {
+  GraphQLOptions,
+  ApolloServerBase
+} from 'apollo-server-core'
+import {
+  renderPlaygroundPage,
+  RenderPageOptions as PlaygroundRenderPageOptions
+} from '@apollographql/graphql-playground-html'
+
+import { graphqlNative } from './nativeApollo'
 
 export interface ServerRegistration {
   path?: string
-  gui?: boolean | PlaygroundRenderPageOptions
 }
 
 export class ApolloServer extends ApolloServerBase {
@@ -19,32 +23,32 @@ export class ApolloServer extends ApolloServerBase {
     return super.graphQLServerOptions({ req, res })
   }
 
+  protected supportsSubscriptions(): boolean {
+    return true
+  }
+
   public createHandler({
-    path,
-    gui
+    path
   }: ServerRegistration = {}) {
     if (!path) path = '/graphql'
 
     this.graphqlPath = path
 
-    const guiEnabled =
-      !!gui || (gui === undefined && process.env.NODE_ENV !== 'production')
-    
     const handler = (req: http.IncomingMessage, res: http.ServerResponse) => {
       if (req.url !== path) return
 
-      if (guiEnabled && req.method === 'GET') {
+      if (this.playgroundOptions && req.method === 'GET') {
         const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
           endpoint: path,
           subscriptionEndpoint: this.subscriptionsPath,
-          version: this.playgroundVersion,
-          ...(typeof gui === 'boolean' ? {} : gui),
+          ...this.playgroundOptions
         }
-        const playgroundPage = renderPlaygroundPage(playgroundRenderPageOptions)
         res.setHeader('Content-Type', 'text/html')
-        res.setHeader('Content-Length', playgroundPage.length)
-        res.write(playgroundPage)
-        return res.end()
+        const playground = renderPlaygroundPage(playgroundRenderPageOptions)
+        // res.setHeader('Content-Length', playground.length)
+        res.write(playground)
+        res.end()
+        return
       }
 
       return graphqlNative(this.createGraphQLServerOptions.bind(this))(

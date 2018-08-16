@@ -57,25 +57,26 @@ export function graphqlNative(
       request: convertNodeHttpToRequest(req)
     }).then(
       ({ graphqlResponse, responseInit }) => {
-        if (responseInit.headers) {
-          const headers = responseInit.headers
-          Object.keys(headers).forEach(header => {
-            res.setHeader(header, headers[header])
+        const headers = responseInit.headers
+        if (headers) {
+          Object.keys(headers).forEach(name => {
+            res.setHeader(name, headers[name])
           })
         }
-        res.setHeader(
-          'Content-Length',
-          graphqlResponse.length
-        )
+        // res.setHeader(
+        //   'Content-Length',
+        //   graphqlResponse.length
+        // )
         res.write(graphqlResponse)
         res.end()
       },
       (error: HttpQueryError) => {
         if ('HttpQueryError' !== error.name) throw error
 
-        if (error.headers) {
-          Object.keys(error.headers).forEach(header => {
-            res.setHeader(header, error.headers[header])
+        const errorHeaders = error.headers
+        if (errorHeaders) {
+          Object.keys(errorHeaders).forEach(name => {
+            res.setHeader(name, errorHeaders[name])
           })
         }
 
