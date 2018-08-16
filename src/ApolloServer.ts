@@ -45,7 +45,6 @@ export class ApolloServer extends ApolloServerBase {
         }
         res.setHeader('Content-Type', 'text/html')
         const playground = renderPlaygroundPage(playgroundRenderPageOptions)
-        // res.setHeader('Content-Length', playground.length)
         res.write(playground)
         res.end()
         return

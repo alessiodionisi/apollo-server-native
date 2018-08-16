@@ -63,10 +63,6 @@ export function graphqlNative(
             res.setHeader(name, headers[name])
           })
         }
-        // res.setHeader(
-        //   'Content-Length',
-        //   graphqlResponse.length
-        // )
         res.write(graphqlResponse)
         res.end()
       },
