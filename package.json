@@ -11,32 +11,29 @@
     "Apollo",
     "Server",
     "Native",
-    "HTTP"
+    "HTTP",
+    "HTTPS",
+    "HTTP2"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/adnsio/apollo-server-native.git"
-  },
+  "repository": "github:adnsio/apollo-server-native",
   "bugs": {
     "url": "https://github.com/adnsio/apollo-server-native/issues"
   },
   "homepage": "https://github.com/adnsio/apollo-server-native#readme",
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "yarn clean && tsc",
-    "prepublish": "yarn build"
+    "build": "rm -rf dist && tsc"
   },
   "dependencies": {
     "@apollographql/graphql-playground-html": "^1.6.0",
-    "apollo-server-core": "^2.0.2",
-    "graphql-subscriptions": "^0.5.8",
-    "graphql-tools": "^3.1.1"
+    "apollo-server-core": "^2.1.0",
+    "graphql-subscriptions": "^1.0.0",
+    "graphql-tools": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^10.7.1",
-    "typescript": "^3.0.1"
+    "@types/node": "^10.11.5",
+    "typescript": "^3.1.1"
   },
   "peerDependencies": {
-    "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0"
+    "graphql": "^14.0.0"
   }
 }

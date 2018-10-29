@@ -1,5 +1,6 @@
 import http from 'http'
-
+import https from 'https'
+import http2 from 'http2'
 import {
   GraphQLOptions,
   ApolloServerBase
@@ -12,6 +13,7 @@ import {
 import { graphqlNative } from './nativeApollo'
 
 export interface ServerRegistration {
+  server: http.Server | https.Server | http2.Http2Server | http2.Http2SecureServer
   path?: string
 }
 
@@ -27,35 +29,52 @@ export class ApolloServer extends ApolloServerBase {
     return true
   }
 
-  public createHandler({
+  public applyMiddleware({
+    server,
     path
-  }: ServerRegistration = {}) {
-    if (!path) path = '/graphql'
+  }: ServerRegistration) {
+    this.graphqlPath = path || '/graphql'
 
-    this.graphqlPath = path
-
-    const handler = (req: http.IncomingMessage, res: http.ServerResponse) => {
-      if (req.url !== path) return
+    server.on('request', (req, res) => {
+      if (this.graphqlPath !== req.url) return
 
       if (this.playgroundOptions && req.method === 'GET') {
         const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
-          endpoint: path,
+          endpoint: this.graphqlPath,
           subscriptionEndpoint: this.subscriptionsPath,
           ...this.playgroundOptions
         }
-        res.setHeader('Content-Type', 'text/html')
+        res.setHeader('content-type', 'text/html')
         const playground = renderPlaygroundPage(playgroundRenderPageOptions)
         res.write(playground)
         res.end()
         return
       }
 
-      return graphqlNative(this.createGraphQLServerOptions.bind(this))(
-        req,
-        res
-      )
-    }
+      graphqlNative(this.createGraphQLServerOptions.bind(this))(req, res)
+      return
+    })
 
-    return handler
+    // const handler = (req: http.IncomingMessage, res: http.ServerResponse) => {
+    //   const graphql = this.createGraphQLServerOptions.bind(this)
+    //   if (req.url !== this.graphqlPath) return
+
+    //   if (this.playgroundOptions && req.method === 'GET') {
+    //     const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
+    //       endpoint: this.graphqlPath,
+    //       subscriptionEndpoint: this.subscriptionsPath,
+    //       ...this.playgroundOptions
+    //     }
+    //     res.setHeader('content-type', 'text/html')
+    //     const playground = renderPlaygroundPage(playgroundRenderPageOptions)
+    //     res.write(playground)
+    //     res.end()
+    //     return
+    //   }
+
+    //   return graphqlNative(graphql)(req, res)
+    // }
+
+    // return handler
   }
 }

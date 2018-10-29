@@ -1,3 +1,5 @@
+import url from 'url'
+import http from 'http'
 import {
   GraphQLOptions,
   HttpQueryError,
@@ -5,8 +7,17 @@ import {
   convertNodeHttpToRequest
 } from 'apollo-server-core'
 
-import url from 'url'
-import http from 'http'
+const getBody = (req: http.IncomingMessage) => {
+  return new Promise<string>((resolve) => {
+    let body = ''
+    req.on('data', chunk => {
+      body += chunk
+    })
+    req.on('end', () => {
+      resolve(body)
+    })
+  })
+}
 
 export interface NativeGraphQLOptionsFunction {
   (req?: http.IncomingMessage, res?: http.ServerResponse): GraphQLOptions | Promise<GraphQLOptions>
@@ -31,25 +42,18 @@ export function graphqlNative(
     if (!req.method) throw new Error('Apollo Server expects req.method')
     if (!req.url) throw new Error('Apollo Server expects req.url')
 
+    // get query
     if (req.method === 'POST') {
       try {
-        const body = await new Promise<string>((resolve) => {
-          let rawBody = ''
-          req.on('data', chunk => {
-            rawBody += chunk
-          })
-          req.on('end', () => {
-            resolve(rawBody)
-          })
-        })
-        query = JSON.parse(body)
-      } catch (err) {
+        query = JSON.parse(await getBody(req))
+      } catch {
         query = undefined
       }
     } else {
       query = url.parse(req.url, true).query
     }
 
+    // run query
     runHttpQuery([req, res], {
       method: req.method,
       options: options,
@@ -67,7 +71,9 @@ export function graphqlNative(
         res.end()
       },
       (error: HttpQueryError) => {
-        if ('HttpQueryError' !== error.name) throw error
+        if ('HttpQueryError' !== error.name) {
+          throw error
+        }
 
         const errorHeaders = error.headers
         if (errorHeaders) {
