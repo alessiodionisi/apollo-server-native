@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-native",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Apollo Server integration for HTTP, HTTPS and HTTP2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,12 @@
   },
   "homepage": "https://github.com/adnsio/apollo-server-native#readme",
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "compile": "tsc",
+    "compile:watch": "tsc --watch"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   },
   "dependencies": {
     "@apollographql/graphql-playground-html": "^1.6.0",
@@ -30,7 +35,7 @@
     "graphql-tools": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^10.11.5",
+    "@types/node": "^11.9.0",
     "typescript": "^3.1.1"
   },
   "peerDependencies": {
