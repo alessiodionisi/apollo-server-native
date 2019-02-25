@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-native",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Apollo Server integration for HTTP, HTTPS and HTTP2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
