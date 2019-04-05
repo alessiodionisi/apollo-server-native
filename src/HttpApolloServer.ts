@@ -1,7 +1,7 @@
 import { GraphQLOptions, ApolloServerBase } from 'apollo-server-core'
 import {
   renderPlaygroundPage,
-  RenderPageOptions as PlaygroundRenderPageOptions
+  RenderPageOptions as PlaygroundRenderPageOptions,
 } from '@apollographql/graphql-playground-html'
 import http from 'http'
 import https from 'https'
@@ -47,7 +47,7 @@ export class HttpApolloServer extends ApolloServerBase {
           const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
             endpoint: path,
             subscriptionEndpoint: this.subscriptionsPath,
-            ...this.playgroundOptions
+            ...this.playgroundOptions,
           }
           res.setHeader('Content-Type', 'text/html')
           const playground = renderPlaygroundPage(playgroundRenderPageOptions)

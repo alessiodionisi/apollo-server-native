@@ -15,7 +15,7 @@ export {
   // playground
   defaultPlaygroundOptions,
   PlaygroundConfig,
-  PlaygroundRenderPageOptions
+  PlaygroundRenderPageOptions,
 } from 'apollo-server-core'
 
 export * from 'graphql-tools'

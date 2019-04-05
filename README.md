@@ -6,7 +6,15 @@ This integration of Apollo Server works with native HTTP, HTTPS and HTTP2.
 
 ## Installation
 
-Install `apollo-server-native` package with yarn or npm
+Install package with yarn or npm:
+
+```sh
+yarn add apollo-server-native graphql
+```
+
+```sh
+npm install apollo-server-native graphql
+```
 
 ## Example with HTTP
 
@@ -16,26 +24,27 @@ const { HttpApolloServer, gql } = require('apollo-server-native')
 
 const typeDefs = gql`
   type Query {
-    "A simple type for getting started!"
     hello: String
   }
 `
 
 const resolvers = {
   Query: {
-    hello: () => 'world'
-  }
+    hello: () => 'Hello world!',
+  },
 }
 
 const server = http.createServer()
-const apolloServer = new HttpApolloServer({ typeDefs, resolvers })
 
+const apolloServer = new HttpApolloServer({ typeDefs, resolvers })
 apolloServer.applyMiddleware({
-  server
+  server,
 })
 
-server.listen(3000, () =>
-  console.log(`🚀 server ready at http://localhost:3000`)
+server.listen({ port: 3000 }, () =>
+  console.log(
+    `🚀 Server ready at https://localhost:3000${apolloServer.graphqlPath}`
+  )
 )
 ```
 
@@ -47,26 +56,30 @@ const { HttpApolloServer, gql } = require('apollo-server-native')
 
 const typeDefs = gql`
   type Query {
-    "A simple type for getting started!"
     hello: String
   }
 `
 
 const resolvers = {
   Query: {
-    hello: () => 'world'
-  }
+    hello: () => 'Hello world!',
+  },
 }
 
-const server = https.createServer({})
-const apolloServer = new HttpApolloServer({ typeDefs, resolvers })
-
-apolloServer.applyMiddleware({
-  server
+const server = https.createServer({
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem'),
 })
 
-server.listen(3000, () =>
-  console.log(`🚀 server ready at https://localhost:3000`)
+const apolloServer = new HttpApolloServer({ typeDefs, resolvers })
+apolloServer.applyMiddleware({
+  server,
+})
+
+server.listen({ port: 3000 }, () =>
+  console.log(
+    `🚀 Server ready at https://localhost:3000${apolloServer.graphqlPath}`
+  )
 )
 ```
 
@@ -78,25 +91,29 @@ const { Http2ApolloServer, gql } = require('apollo-server-native')
 
 const typeDefs = gql`
   type Query {
-    "A simple type for getting started!"
     hello: String
   }
 `
 
 const resolvers = {
   Query: {
-    hello: () => 'world'
-  }
+    hello: () => 'Hello world!',
+  },
 }
 
-const server = http2.createSecureServer({})
-const apolloServer = new Http2ApolloServer({ typeDefs, resolvers })
-
-apolloServer.applyMiddleware({
-  server
+const server = http2.createSecureServer({
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem'),
 })
 
-server.listen(3000, () =>
-  console.log(`🚀 server ready at https://localhost:3000`)
+const apolloServer = new Http2ApolloServer({ typeDefs, resolvers })
+apolloServer.applyMiddleware({
+  server,
+})
+
+server.listen({ port: 3000 }, () =>
+  console.log(
+    `🚀 Server ready at https://localhost:3000${apolloServer.graphqlPath}`
+  )
 )
 ```

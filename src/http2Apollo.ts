@@ -3,7 +3,7 @@ import http2 from 'http2'
 import {
   GraphQLOptions,
   HttpQueryError,
-  runHttpQuery
+  runHttpQuery,
 } from 'apollo-server-core'
 import { Headers, Request } from 'apollo-server-env'
 
@@ -46,7 +46,7 @@ const createQueryRequest = (headers: http2.IncomingHttpHeaders) => {
 
   return new Request(path, {
     headers: rHeaders,
-    method
+    method,
   })
 }
 
@@ -80,7 +80,7 @@ export function graphqlHttp2(
         method === 'POST'
           ? JSON.parse(await getStreamBody(stream))
           : new URL(path).searchParams,
-      request: createQueryRequest(headers)
+      request: createQueryRequest(headers),
     }).then(
       ({ graphqlResponse, responseInit }) => {
         if (responseInit.headers) {
@@ -96,7 +96,7 @@ export function graphqlHttp2(
 
         stream.respond({
           ...error.headers,
-          ':status': error.statusCode
+          ':status': error.statusCode,
         })
 
         stream.end(error.message)

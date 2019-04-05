@@ -3,7 +3,7 @@ import http from 'http'
 import {
   GraphQLOptions,
   HttpQueryError,
-  runHttpQuery
+  runHttpQuery,
 } from 'apollo-server-core'
 import { Headers, Request } from 'apollo-server-env'
 
@@ -45,7 +45,7 @@ const createQueryRequest = (req: http.IncomingMessage) => {
 
   return new Request(url, {
     headers: rHeaders,
-    method
+    method,
   })
 }
 
@@ -76,7 +76,7 @@ export function graphqlHttp(
         req.method === 'POST'
           ? JSON.parse(await getRequestBody(req))
           : new URL(url).searchParams,
-      request: createQueryRequest(req)
+      request: createQueryRequest(req),
     }).then(
       ({ graphqlResponse, responseInit }) => {
         if (responseInit.headers) {

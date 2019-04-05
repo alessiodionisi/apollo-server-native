@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-native",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Apollo Server integration for HTTP, HTTPS and HTTP2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,19 +24,15 @@
     "compile": "tsc",
     "compile:watch": "tsc --watch"
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "dependencies": {
-    "@apollographql/graphql-playground-html": "^1.6.0",
-    "apollo-server-core": "^2.1.0",
-    "graphql-subscriptions": "^1.0.0",
-    "graphql-tools": "^4.0.0"
+    "@apollographql/graphql-playground-html": "^1.6.6",
+    "apollo-server-core": "^2.4.8",
+    "graphql-subscriptions": "^1.1.0",
+    "graphql-tools": "^4.0.4"
   },
   "devDependencies": {
-    "@types/node": "^11.9.0",
-    "typescript": "^3.1.1"
+    "@types/node": "^11.13.0",
+    "typescript": "^3.4.1"
   },
   "peerDependencies": {
     "graphql": "^14.0.0"
