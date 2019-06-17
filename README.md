@@ -1,8 +1,8 @@
-# Apollo Server integration for HTTP, HTTPS and HTTP2
+# Apollo Server integration for native Node.js HTTP
 
 [![npm version](https://badge.fury.io/js/apollo-server-native.svg)](https://badge.fury.io/js/apollo-server-native)
 
-This integration of Apollo Server works with native HTTP, HTTPS and HTTP2.
+This integration of Apollo Server works with native Node.js HTTP.
 
 ## Installation
 
@@ -20,7 +20,7 @@ npm install apollo-server-native graphql
 
 ```js
 const http = require('http')
-const { HttpApolloServer, gql } = require('apollo-server-native')
+const { ApolloServer, gql } = require('apollo-server-native')
 
 const typeDefs = gql`
   type Query {
@@ -36,10 +36,10 @@ const resolvers = {
 
 const server = http.createServer()
 
-const apolloServer = new HttpApolloServer({ typeDefs, resolvers })
-apolloServer.applyMiddleware({
-  server,
-})
+const apolloServer = new ApolloServer({ typeDefs, resolvers })
+// apolloServer.applyMiddleware({
+//   server,
+// })
 
 server.listen({ port: 3000 }, () =>
   console.log(
@@ -52,7 +52,7 @@ server.listen({ port: 3000 }, () =>
 
 ```js
 const https = require('https')
-const { HttpApolloServer, gql } = require('apollo-server-native')
+const { ApolloServer, gql } = require('apollo-server-native')
 
 const typeDefs = gql`
   type Query {
@@ -71,45 +71,10 @@ const server = https.createServer({
   cert: fs.readFileSync('cert.pem'),
 })
 
-const apolloServer = new HttpApolloServer({ typeDefs, resolvers })
-apolloServer.applyMiddleware({
-  server,
-})
-
-server.listen({ port: 3000 }, () =>
-  console.log(
-    `🚀 Server ready at https://localhost:3000${apolloServer.graphqlPath}`
-  )
-)
-```
-
-## Example with HTTP2
-
-```js
-const http2 = require('http2')
-const { Http2ApolloServer, gql } = require('apollo-server-native')
-
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`
-
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-}
-
-const server = http2.createSecureServer({
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
-})
-
-const apolloServer = new Http2ApolloServer({ typeDefs, resolvers })
-apolloServer.applyMiddleware({
-  server,
-})
+const apolloServer = new ApolloServer({ typeDefs, resolvers })
+// apolloServer.applyMiddleware({
+//   server,
+// })
 
 server.listen({ port: 3000 }, () =>
   console.log(

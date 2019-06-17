@@ -21,5 +21,4 @@ export {
 export * from 'graphql-tools'
 export * from 'graphql-subscriptions'
 
-export { HttpApolloServer, HttpServerRegistration } from './HttpApolloServer'
-export { Http2ApolloServer, Http2ServerRegistration } from './Http2ApolloServer'
+export { ApolloServer, ServerRegistration } from './ApolloServer'
