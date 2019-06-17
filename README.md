@@ -34,12 +34,11 @@ const resolvers = {
   },
 }
 
+const apolloServer = new ApolloServer({ typeDefs, resolvers })
+
 const server = http.createServer()
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
-// apolloServer.applyMiddleware({
-//   server,
-// })
+server.on('request', apolloServer.createHandler())
 
 server.listen({ port: 3000 }, () =>
   console.log(
@@ -66,15 +65,14 @@ const resolvers = {
   },
 }
 
+const apolloServer = new ApolloServer({ typeDefs, resolvers })
+
 const server = https.createServer({
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem'),
 })
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
-// apolloServer.applyMiddleware({
-//   server,
-// })
+server.on('request', apolloServer.createHandler())
 
 server.listen({ port: 3000 }, () =>
   console.log(
