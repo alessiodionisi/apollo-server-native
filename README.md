@@ -1,6 +1,7 @@
 # Apollo Server integration for native Node.js HTTP
 
 [![npm version](https://badge.fury.io/js/apollo-server-native.svg)](https://badge.fury.io/js/apollo-server-native)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fadnsio%2Fapollo-server-native.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fadnsio%2Fapollo-server-native?ref=badge_shield)
 
 This integration of Apollo Server works with native Node.js HTTP.
 
@@ -80,3 +81,7 @@ server.listen({ port: 3000 }, () =>
   )
 )
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fadnsio%2Fapollo-server-native.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fadnsio%2Fapollo-server-native?ref=badge_large)
